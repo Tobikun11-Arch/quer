@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Queue — Join the waitlist</title>
+<meta name="description" content="Queue is the bridge between your content plan and your own Claude. Plan posts on a board, Claude does the editing, you approve, and Queue posts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F6FA; --surface:#FFFFFF; --sunk:#ECEEF5; --ink:#1B2340; --muted:#4A5578; --line:#D9DDEA;
+  --coral:#F08A6C; --flap:#D46A50; --gold:#F5C04F; --mint:#7FD1AE; --btn-ink:#1B2340;
+  --focus:#3B4CB8;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#131A2E; --surface:#1C2440; --sunk:#232C4C; --ink:#EEF0F7; --muted:#AAB2CC; --line:#323C60;
+    --btn-ink:#1B2340; --focus:#9AA9FF;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 Figtree,system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3,.wordmark{font-family:"Space Grotesk",Figtree,system-ui,sans-serif;letter-spacing:-0.02em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+
+header{padding:28px 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:40px;height:40px}
+.wordmark{font-weight:700;font-size:30px;line-height:1}
+
+.hero > *{min-width:0}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;padding-block:24px 72px}
+.hero h1{font-size:clamp(40px,5.4vw,64px);line-height:1.02;margin:0 0 20px;font-weight:700}
+.lede{font-size:20px;color:var(--muted);margin:0 0 32px;max-width:34ch}
+
+/* board demo */
+.demo{position:sticky;top:24px;padding-top:8px;padding-bottom:150px}
+.board-scroll{overflow-x:auto;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
+.board{position:relative;min-width:540px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:18px}
+.col h3{font:600 13px/1.2 Figtree,system-ui,sans-serif;color:var(--muted);margin:0 0 10px;letter-spacing:0}
+.col .slot{background:var(--sunk);border-radius:12px;min-height:210px;padding:8px;display:flex;flex-direction:column;gap:8px}
+.ghost{height:46px;border-radius:9px;background:var(--surface);border:1px solid var(--line)}
+.ghost.short{height:34px}
+.mover{position:absolute;top:160px;left:18px;width:calc((100% - 36px - 40px)/5);padding:8px;
+  animation:travel 5.5s cubic-bezier(.6,0,.3,1) .6s 1 both}
+.mover .card{background:#FFFFFF;border-radius:10px;box-shadow:0 6px 18px rgba(27,35,64,.18);padding:9px 10px 10px;color:#1B2340}
+.mover .stripe{height:6px;border-radius:3px;background:var(--gold);margin-bottom:8px;animation:stripe 5.5s steps(1) .6s 1 both}
+.mover .t{font:600 12px/1.3 Figtree,sans-serif}
+.mover .s{font:500 11px/1.3 Figtree,sans-serif;color:#4A5578;margin-top:4px}
+@keyframes travel{
+  0%{transform:translateX(0)}
+  18%{transform:translateX(calc(100% + 10px))}
+  42%{transform:translateX(calc(200% + 20px))}
+  70%{transform:translateX(calc(300% + 30px))}
+  100%{transform:translateX(calc(400% + 40px))}
+}
+@keyframes stripe{0%{background:#F5C04F}42%{background:#8FA3C9}70%{background:#7FD1AE}100%{background:#F08A6C}}
+.tote{position:absolute;left:8px;bottom:0;width:150px;height:150px}
+.tote .arm{transform-box:fill-box;transform-origin:0% 100%;animation:wave 2.6s ease-in-out 1.2s 2}
+.tote .eyes{transform-box:fill-box;transform-origin:center;animation:blink 4.2s 2s infinite}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(-20deg)}20%{transform:rotate(10deg)}30%{transform:rotate(-20deg)}40%{transform:rotate(0)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+
+/* form */
+.signup{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px}
+.signup h2{font-size:24px;margin:0 0 4px}
+.signup .hint{color:var(--muted);margin:0 0 22px;font-size:15px}
+.field{margin:0 0 20px}
+.field > label, fieldset legend{display:block;font-weight:600;font-size:15px;margin-bottom:8px}
+.opt{font-weight:400;color:var(--muted)}
+input[type=email],input[type=text]{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px}
+input[type=email]:focus,input[type=text]:focus{border-color:var(--focus);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 30%,transparent)}
+fieldset{border:0;padding:0;margin:0 0 20px;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{position:relative}
+.chips input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chips span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);font-size:15px;font-weight:500;cursor:pointer}
+.chips input:checked + span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips input:focus-visible + span{outline:3px solid var(--focus);outline-offset:2px}
+.submit{width:100%;min-height:52px;border:0;border-radius:14px;background:var(--coral);color:var(--btn-ink);font:700 17px/1 "Space Grotesk",Figtree,sans-serif;cursor:pointer}
+.submit:hover{background:#F39A80}
+.submit[disabled]{opacity:.6;cursor:progress}
+.req{font-size:14px;color:var(--muted);margin:14px 0 0}
+.error{color:#B3261E;font-weight:600;font-size:15px;margin:12px 0 0}
+@media (prefers-color-scheme: dark){.error{color:#FF9E94}}
+.done{display:none;text-align:left}
+.done h2{font-size:26px;margin:0 0 8px}
+.done p{margin:0;color:var(--muted)}
+.signup.sent form{display:none}
+.signup.sent .done{display:block}
+.hp{position:absolute;left:-9999px}
+
+/* how it works */
+.how{padding-block:24px 80px}
+.how h2{font-size:clamp(28px,3.4vw,40px);margin:0 0 28px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:s}
+.steps li{counter-increment:s;border-top:2px solid var(--ink);padding-top:16px}
+.steps li::before{content:counter(s);font:700 15px/1 "Space Grotesk",sans-serif;color:var(--flap);display:block;margin-bottom:10px}
+@media (prefers-color-scheme: dark){.steps li::before{color:var(--coral)}}
+.steps h3{font-size:21px;margin:0 0 6px}
+.steps p{margin:0;color:var(--muted)}
+.fine{border-top:1px solid var(--line);padding-block:24px 40px;color:var(--muted);font-size:15px}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:40px}
+  .demo{position:relative;top:auto;padding-bottom:120px}.tote{width:120px;height:120px}
+  .steps{grid-template-columns:1fr;gap:22px}
+}
+@media (prefers-reduced-motion: reduce){
+  .mover,.mover .stripe,.tote .arm,.tote .eyes{animation-duration:1ms;animation-delay:0s;animation-iteration-count:1}
+}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <a class="brand" href="./" aria-label="Queue home">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><path d="M62 64 Q100 8 138 64" fill="none" stroke="#D46A50" stroke-width="12" stroke-linecap="round"/><g transform="rotate(-12 78 64)"><rect x="56" y="44" width="44" height="34" rx="5" fill="#FFFFFF" stroke="#E7D9D2" stroke-width="2"/><rect x="56" y="44" width="44" height="8" rx="3" fill="#F5C04F"/></g><g transform="rotate(10 122 60)"><rect x="100" y="42" width="44" height="34" rx="5" fill="#FFFFFF" stroke="#E7D9D2" stroke-width="2"/><rect x="100" y="42" width="44" height="8" rx="3" fill="#7FD1AE"/></g><rect x="30" y="66" width="140" height="114" rx="28" fill="#F08A6C"/><path d="M30 94 Q30 66 58 66 L142 66 Q170 66 170 94 L170 112 Q100 134 30 112 Z" fill="#D46A50"/><rect x="90" y="110" width="20" height="16" rx="5" fill="#F5C04F"/></svg>
+    <span class="wordmark">queue</span>
+  </a>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div>
+      <h1>The bridge between your content plan and your Claude.</h1>
+      <p class="lede">Plan posts on a board. Queue hands each one to your own Claude Code to edit, tracks the progress, and posts once you approve.</p>
+
+      <div class="signup" id="signup">
+        <form name="waitlist" method="POST" action="https://formspree.io/f/xjyynbgk" novalidate>
+          <input type="hidden" name="_subject" value="New Queue waitlist signup">
+          <p class="hp"><label>Leave this empty <input name="_gotcha" tabindex="-1" autocomplete="off"></label></p>
+          <h2>Join the early waitlist</h2>
+          <p class="hint">Three quick questions help us invite the right people first.</p>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="name">Name <span class="opt">(optional)</span></label>
+            <input id="name" name="name" type="text" autocomplete="name">
+          </div>
+
+          <fieldset>
+            <legend>Do you already use Claude Code?</legend>
+            <div class="chips">
+              <label><input type="radio" name="uses_claude_code" value="Yes, regularly" required><span>Yes, regularly</span></label>
+              <label><input type="radio" name="uses_claude_code" value="I've tried it"><span>I’ve tried it</span></label>
+              <label><input type="radio" name="uses_claude_code" value="No"><span>No</span></label>
+              <label><input type="radio" name="uses_claude_code" value="What's Claude Code?"><span>What’s Claude Code?</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>How many videos do you post per week?</legend>
+            <div class="chips">
+              <label><input type="radio" name="videos_per_week" value="None yet" required><span>None yet</span></label>
+              <label><input type="radio" name="videos_per_week" value="1-2"><span>1–2</span></label>
+              <label><input type="radio" name="videos_per_week" value="3-5"><span>3–5</span></label>
+              <label><input type="radio" name="videos_per_week" value="6+"><span>6 or more</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="tools">What do you use now to plan and edit your posts?</label>
+            <input id="tools" name="current_tools" type="text" placeholder="e.g. CapCut, Notion, a freelance editor">
+          </div>
+
+          <button class="submit" type="submit">Join the waitlist</button>
+          <p class="error" id="err" role="alert" hidden></p>
+          <p class="req">Queue runs on your desktop with your own Claude Code. We’ll only email you about Queue’s early access.</p>
+        </form>
+        <div class="done" role="status" aria-live="polite">
+          <h2>You’re on the list.</h2>
+          <p>We’ll email you when early access opens.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo" aria-label="A task card moving across the Queue board from Backlog to Scheduled" role="img">
+      <div class="board-scroll">
+        <div class="board">
+          <div class="col"><h3>Backlog</h3><div class="slot"><div class="ghost short"></div></div></div>
+          <div class="col"><h3>To Do</h3><div class="slot"><div class="ghost"></div></div></div>
+          <div class="col"><h3>In Progress</h3><div class="slot"></div></div>
+          <div class="col"><h3>Checking</h3><div class="slot"><div class="ghost short"></div></div></div>
+          <div class="col"><h3>Scheduled</h3><div class="slot"><div class="ghost"></div><div class="ghost short"></div></div></div>
+          <div class="mover" aria-hidden="true"><div class="card"><div class="stripe"></div><div class="t">Monday: faith</div><div class="s">Video post</div></div></div>
+        </div>
+      </div>
+      <svg class="tote" viewBox="-130 150 260 380" aria-hidden="true">
+        <ellipse cx="0" cy="508" rx="70" ry="9" fill="#1B2340" opacity="0.1"/>
+        <rect x="-26" y="428" width="20" height="76" rx="10" fill="#F08A6C"/><rect x="6" y="428" width="20" height="76" rx="10" fill="#F08A6C"/>
+        <rect x="-42" y="328" width="84" height="112" rx="32" fill="#F08A6C"/>
+        <line x1="-38" y1="348" x2="-62" y2="412" stroke="#F08A6C" stroke-width="20" stroke-linecap="round"/>
+        <path d="M-58 212 Q0 138 58 212" fill="none" stroke="#D46A50" stroke-width="14" stroke-linecap="round"/>
+        <rect x="-46" y="174" width="48" height="36" rx="5" fill="#FFFFFF" transform="rotate(-12 -22 192)"/>
+        <rect x="6" y="170" width="48" height="36" rx="5" fill="#FFFFFF" transform="rotate(10 30 188)"/>
+        <rect x="-82" y="196" width="164" height="136" rx="32" fill="#F08A6C"/>
+        <path d="M-82 228 Q-82 196 -50 196 L50 196 Q82 196 82 228 L82 246 Q0 270 -82 246 Z" fill="#D46A50"/>
+        <rect x="-11" y="246" width="22" height="18" rx="5" fill="#F5C04F"/>
+        <g class="eyes"><ellipse cx="-28" cy="292" rx="8" ry="10" fill="#2B2B3A"/><ellipse cx="28" cy="292" rx="8" ry="10" fill="#2B2B3A"/></g>
+        <path d="M-10 312 Q0 320 10 312" fill="none" stroke="#2B2B3A" stroke-width="4" stroke-linecap="round"/>
+        <g class="arm"><line x1="40" y1="346" x2="100" y2="340" stroke="#F08A6C" stroke-width="20" stroke-linecap="round"/><line x1="100" y1="340" x2="118" y2="276" stroke="#F08A6C" stroke-width="20" stroke-linecap="round"/></g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="wrap how">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><h3>Plan on the board</h3><p>Add post ideas as cards. Give each weekday a theme, or plan a fresh week.</p></li>
+      <li><h3>Queue hands it to Claude</h3><p>When a card is ready, Queue sends it to Claude Code on your computer. Claude does the editing; Queue tracks the progress.</p></li>
+      <li><h3>You approve, Queue posts</h3><p>Finished videos wait in Checking. Nothing goes out until you approve it.</p></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="wrap fine">
+  Queue is in early development. Requires a desktop computer and Claude Code. Queue is an independent product and is not made by Anthropic.
+</footer>
+
+<script>
+(function(){
+  var box=document.getElementById('signup');
+  var form=box.querySelector('form');
+  var err=document.getElementById('err');
+  var btn=form.querySelector('.submit');
+  function show(msg){err.textContent=msg;err.hidden=false;}
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    err.hidden=true;
+    var email=form.email.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){show('Enter a valid email address.');form.email.focus();return;}
+    if(!form.querySelector('input[name=uses_claude_code]:checked')){show('Choose whether you use Claude Code.');return;}
+    if(!form.querySelector('input[name=videos_per_week]:checked')){show('Choose how many videos you post per week.');return;}
+    btn.disabled=true;btn.textContent='Joining…';
+    fetch(form.action,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)})
+      .then(function(r){if(!r.ok)throw new Error(r.status);box.classList.add('sent');box.querySelector('.done').focus&&box.querySelector('.done h2').setAttribute('tabindex','-1');box.querySelector('.done h2').focus();})
+      .catch(function(){show('Your signup didn’t go through. Check your connection and try again.');})
+      .finally(function(){btn.disabled=false;btn.textContent='Join the waitlist';});
+  });
+})();
+</script>
+</body>
+</html>
